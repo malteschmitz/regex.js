@@ -1,28 +1,37 @@
 import 'source-map-support/register'
 
 interface Disjunction {
-  kind: "disjunction",
+  kind: "Disjunction",
   lhs: RegEx,
   rhs: RegEx
 }
 
 interface Concatenation {
-  kind: "concatenation",
+  kind: "Concatenation",
   lhs: RegEx,
   rhs: RegEx
 }
 
 interface Char {
-  kind: "char",
-  content: String
+  kind: "Char",
+  content: string
 }
 
 interface Kleene {
-  kind: "kleene",
+  kind: "Kleene",
   operand: RegEx
 }
 
 type RegEx = Disjunction | Concatenation | Char | Kleene
+
+function printer(re: RegEx): string {
+  switch(re.kind) {
+    case "Disjunction": return "(" + printer(re.lhs) + "|" + printer(re.rhs) + ")";
+    case "Concatenation": return printer(re.lhs) + printer(re.rhs);
+    case "Char": return re.content;
+    case "Kleene": return "(" + printer(re.operand) + ")*";
+  }
+}
 
 import { parser as typed_parser } from "./regex-parser";
 const parser = typed_parser as any;
@@ -34,8 +43,6 @@ if (!input) {
 }
 var re = parser.parse(input) as RegEx;
 
-switch(re.kind) {
-  case "char": console.log(re.content);
-}
-
 console.log(re);
+
+console.log(printer(re));

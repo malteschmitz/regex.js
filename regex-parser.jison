@@ -29,21 +29,21 @@ expressions
 
 regex:
   regex "|" konkat
-    {$$ = {kind: 'disjunction', lhs: $1, rhs: $3};}
+    {$$ = {kind: 'Disjunction', lhs: $1, rhs: $3};}
   | konkat
   ;
 
 konkat:
   konkat rep
-    {$$ = {kind: 'concatenation', lhs: $1, rhs: $2};}
+    {$$ = {kind: 'Concatenation', lhs: $1, rhs: $2};}
   | rep
   ;
 
 rep:
   rep "*"
-    {$$ = {kind: 'kleene', operand: $1};}
+    {$$ = {kind: 'Kleene', operand: $1};}
   | CHAR
-    {$$ = {kind: 'char', content: yytext};}
+    {$$ = {kind: 'Char', content: yytext};}
   | "(" regex ")"
     {$$ = $2;}
   ;
