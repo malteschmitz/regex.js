@@ -4,9 +4,7 @@ Automata based RegEx interpreter (educational!)
 
 ## Dependencies
 
-* typescript
-* jison
-* npm
+Use npm!
 
 ```
 npm install
@@ -14,6 +12,14 @@ npm install
 
 ## Build
 
+Compile Jison and TypeScript with
+
 ```
 npm run watch
+```
+
+## Try
+
+```
+node regex.js "(ab|c*)e"
 ```
