@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Foo</title>
+  </head>
+  <body>
+    <p>In order to run this experiment in the browser you need to to overwrite the module definition to <code>amd</code> using</p>
+    <pre>tsc -p . --module amd</pre>
+    <p>Further more the <code>test.ts</code> is currently expecting a node.js <code>process</code> global variable.</p>
+    <script data-main="test" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+  </body>
+</html>
