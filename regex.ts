@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 
 import { parser as typed_parser } from "./regex-parser";
 const parser = typed_parser as any;

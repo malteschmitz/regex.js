@@ -1,0 +1,16 @@
+{
+  "name": "regex.js",
+  "version": "1.0.0",
+  "description": "Automata based RegEx interpreter (educational!)",
+  "scripts": {
+    "jison": "jison regex-parser.jison",
+    "ts": "tsc -p .",
+    "watch": "tsc -p . -w",
+    "prewatch": "npm run jison"
+  },
+  "author": "Malte Schmitz <malte@schmitz-sh.de>",
+  "license": "MIT",
+  "dependencies": {
+    "source-map-support": "^0.4.8"
+  }
+}
