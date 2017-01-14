@@ -32,7 +32,7 @@ expressions
 
 e
     : e '|' e
-        {$$ = {kind: 'or', lhs: $1, rhs: $3};}
+        {$$ = {kind: 'disjunction', lhs: $1, rhs: $3};}
     | e '*'
         {$$ = {kind: 'kleene', operand: $1};}
     | '(' e ')'
