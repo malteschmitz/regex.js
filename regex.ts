@@ -6,6 +6,12 @@ interface Disjunction {
   rhs: RegEx
 }
 
+interface Concatenation {
+  kind: "concatenation",
+  lhs: RegEx,
+  rhs: RegEx
+}
+
 interface Char {
   kind: "char",
   content: String
@@ -16,7 +22,7 @@ interface Kleene {
   operand: RegEx
 }
 
-type RegEx = Disjunction | Char | Kleene
+type RegEx = Disjunction | Concatenation | Char | Kleene
 
 import { parser as typed_parser } from "./regex-parser";
 const parser = typed_parser as any;

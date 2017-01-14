@@ -6,7 +6,7 @@
 %%
 
 \s+                   /* skip whitespace */
-[a-z]+                return 'CHAR'
+[a-z]                 return 'CHAR'
 "*"                   return '*'
 "|"                   return '|'
 "("                   return '('
@@ -18,25 +18,32 @@
 
 /* operator associations and precedence */
 
-%left '|'
-%right '*'
-
 %start expressions
 
 %% /* language grammar */
 
 expressions
-    : e EOF
+    : regex EOF
         { return $1; }
     ;
 
-e
-    : e '|' e
-        {$$ = {kind: 'disjunction', lhs: $1, rhs: $3};}
-    | e '*'
-        {$$ = {kind: 'kleene', operand: $1};}
-    | '(' e ')'
-        {$$ = $2;}
-    | CHAR
-        {$$ = {kind: 'char', content: yytext};}
-    ;
+regex:
+  regex "|" konkat
+    {$$ = {kind: 'disjunction', lhs: $1, rhs: $3};}
+  | konkat
+  ;
+
+konkat:
+  konkat rep
+    {$$ = {kind: 'concatenation', lhs: $1, rhs: $2};}
+  | rep
+  ;
+
+rep:
+  rep "*"
+    {$$ = {kind: 'kleene', operand: $1};}
+  | CHAR
+    {$$ = {kind: 'char', content: yytext};}
+  | "(" regex ")"
+    {$$ = $2;}
+  ;
