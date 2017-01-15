@@ -3,12 +3,19 @@
         "module": "CommonJS",
         "target": "es6",
         "alwaysStrict": true,
-        "allowJs": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noUnusedLocals": true,
         "strictNullChecks": true,
         "sourceMap": true
-    }
+    },
+    "files": [
+        "typings/index.d.ts"
+    ],
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
+    ]
 }
