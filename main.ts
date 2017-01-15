@@ -2,14 +2,20 @@ import 'source-map-support/register'
 
 import { printer } from "./printer"
 import { parser } from "./regex-parser";
+import { regex2nfa } from "./regex2nfa";
+import { Nfa } from "./nfa";
 
 declare var process: any;
-var input = process.argv[2];
-if (!input) {
-  throw "No argument given!"
+var regex: string = process.argv[2];
+var word: string = process.argv[3];
+if (!regex || !word) {
+  throw "Usage: node main.js <RegEx> <word>"
 }
-var re = parser.parse(input);
 
-console.log(re);
+var re = parser.parse(regex);
 
-console.log(printer(re));
+console.log("RegEx: " + printer(re));
+console.log("Word: " + word);
+
+var nfa = regex2nfa(re);
+console.log("Match: " + Nfa.exec(nfa, word));

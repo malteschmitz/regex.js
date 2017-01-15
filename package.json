@@ -4,10 +4,12 @@
   "description": "Automata based RegEx interpreter (educational!)",
   "scripts": {
     "jison": "jison regex-parser.jison",
-    "ts": "tsc -p .",
-    "watch": "tsc -p . -w",
+    "precompile": "npm run jison",
+    "compile": "tsc -p .",
+    "pretest": "npm run compile",
+    "test": "mocha",
     "prewatch": "npm run jison",
-    "test": "tsc -p . && mocha"
+    "watch": "tsc -p . -w"
   },
   "author": "Malte Schmitz <malte@schmitz-sh.de>",
   "license": "MIT",

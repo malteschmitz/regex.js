@@ -46,4 +46,24 @@ export module Nfa {
       acceptings: acceptings
     }
   }
+
+  export function exec(nfa: Nfa, input: string): boolean {
+    var states = nfa.initials;
+    var array = input.split('');
+    array.forEach(c => {
+      states = step(nfa, states, c);
+    });
+    return states.some(state => nfa.acceptings.indexOf(state) > -1);
+  }
+
+  function step(nfa: Nfa, states: State[], input: string): State[] {
+    var result: State[] = [];
+    for (var state of states) {
+      var next = Transitions.get(nfa.transitions, state, input);
+      if (next) {
+        result.push(next);
+      }
+    }
+    return result;
+  }
 }
