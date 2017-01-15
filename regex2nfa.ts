@@ -1,23 +1,81 @@
 import {Nfa} from "./nfa";
 import {State, Transitions} from "./nfa";
-import {RegEx} from "./regex";
+import {RegEx,Char,Concatenation,Disjunction,Kleene} from "./regex";
+
+function char2nfa(char: Char): Nfa {
+  var transitions: Transitions = new Map();
+  Transitions.add(transitions, 0, char.content, 1);
+  return {
+    states: [0,1],
+    initials: [0],
+    transitions: transitions,
+    acceptings: [1]
+  }
+}
+
+function concatenation2nfa(concatenation: Concatenation): Nfa {
+  var left = regex2nfa(concatenation.lhs);
+  var right = regex2nfa(concatenation.rhs);
+  // make state sets disjoint
+  var offset = Math.max(...left.states) + 1;
+  right = Nfa.mapStates(right, q => q + offset);
+
+  var transitions = right.transitions;
+  for (var [from, map] of left.transitions) {
+    for (var [input, to] of map) {
+      Transitions.add(transitions, from, input, to);
+      if (left.acceptings.indexOf(to) > -1) {
+        right.initials.forEach(initial => {
+          Transitions.add(transitions, from, input, initial);
+        });
+      }
+    }
+  }
+
+  return {
+    states: left.states.concat(right.states),
+    initials: left.initials,
+    transitions: transitions,
+    acceptings: right.acceptings
+  }
+}
+
+function disjunction2nfa(disjunction: Disjunction): Nfa {
+  var one = regex2nfa(disjunction.lhs);
+  var two = regex2nfa(disjunction.rhs);
+
+  // make state sets disjoint
+  var offset = Math.max(...one.states) + 1;
+  two = Nfa.mapStates(two, q => q + offset);
+
+  var transitions = two.transitions;
+  for (var [from, map] of one.transitions) {
+    for (var [input, to] of map) {
+      Transitions.add(transitions, from, input, to);
+    }
+  }
+
+  return {
+    states: one.states.concat(two.states),
+    initials: one.initials.concat(two.initials),
+    transitions: transitions,
+    acceptings: one.acceptings.concat(two.acceptings)
+  }
+}
+
+function kleene2nfa(kleene: Kleene): Nfa {
+  throw "Not yet implemented"
+}
 
 export function regex2nfa(regex: RegEx): Nfa {
   switch (regex.kind) {
     case "Char":
-      var transitions: Transitions = new Map();
-      Transitions.add(transitions, 0, regex.content, 1);
-      return {
-        states: [0,1],
-        initials: [0],
-        transitions: transitions,
-        accepting: [1]
-      }
+      return char2nfa(regex);
     case "Concatenation":
-      throw "Not yet implemented"
+      return concatenation2nfa(regex);
     case "Disjunction":
-      throw "Not yet implemented"
+      return disjunction2nfa(regex);
     case "Kleene":
-      throw "Not yet implemented"
+      return kleene2nfa(regex);
   }
 }

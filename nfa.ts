@@ -5,7 +5,7 @@ export interface Nfa {
   states: State[],
   initials: State[],
   transitions: Transitions,
-  accepting: State[]
+  acceptings: State[]
 }
 
 export module Transitions {
@@ -25,5 +25,25 @@ export module Transitions {
       return result.get(input);
     }
     return undefined;
+  }
+}
+
+export module Nfa {
+  export function mapStates(nfa: Nfa, f: (s: State) => State) {
+    var states = nfa.states.map(f);
+    var initials = nfa.initials.map(f);
+    var transitions: Transitions = new Map();
+    for (var [from, map] of nfa.transitions) {
+      for (var [input, to] of map) {
+        Transitions.add(transitions, f(from), input, f(to));
+      }
+    }
+    var acceptings = nfa.acceptings.map(f);
+    return {
+      states: states,
+      initials: initials,
+      transitions: transitions,
+      acceptings: acceptings
+    }
   }
 }
