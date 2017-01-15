@@ -63,4 +63,8 @@ import { Transitions } from '../nfa'
         next && expect(nfa.acceptings).to.include(next);
       }
     }
+
+    @test "convert Kleene"() {
+      throw new Error("Not yet implemented")
+    }
 }
