@@ -1,7 +1,7 @@
 import { suite, test } from "mocha-typescript";
+import { expect } from 'chai'
 
 import { parser } from '../regex-parser'
-import { expect } from 'chai'
 
 @suite class RegexParser {
     @test "parse Char"() {
