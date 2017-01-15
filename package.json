@@ -6,7 +6,8 @@
     "jison": "jison regex-parser.jison",
     "ts": "tsc -p .",
     "watch": "tsc -p . -w",
-    "prewatch": "npm run jison"
+    "prewatch": "npm run jison",
+    "test": "tsc -p . && mocha"
   },
   "author": "Malte Schmitz <malte@schmitz-sh.de>",
   "license": "MIT",
@@ -14,7 +15,10 @@
     "source-map-support": "^0.4.8"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "jison": "^0.4.17",
-    "typescript": "^2.1.5"
+    "mocha": "^3.2.0",
+    "typescript": "^2.1.5",
+    "typings": "^2.1.0"
   }
 }
