@@ -46,4 +46,30 @@ import { Nfa } from '../nfa';
         expect(Nfa.exec(nfa, "bx")).to.false;
         expect(Nfa.exec(nfa, "")).to.false;
     }
+
+    @test "Kleene star"() {
+        let nfa = regex2nfa(parser.parse("ab*c"));
+        expect(Nfa.exec(nfa, "abc")).to.true;
+        expect(Nfa.exec(nfa, "ac")).to.true;
+        expect(Nfa.exec(nfa, "abbbc")).to.true;
+        expect(Nfa.exec(nfa, "acc")).to.false;
+        expect(Nfa.exec(nfa, "abd")).to.false;
+        expect(Nfa.exec(nfa, "a")).to.false;
+        expect(Nfa.exec(nfa, "ab")).to.false;
+        expect(Nfa.exec(nfa, "bc")).to.false;
+        expect(Nfa.exec(nfa, "")).to.false;
+    }
+
+    @test "Kleene star with alternation"() {
+        let nfa = regex2nfa(parser.parse("a(b|c)*d"));
+        expect(Nfa.exec(nfa, "abd")).to.true;
+        expect(Nfa.exec(nfa, "acd")).to.true;
+        expect(Nfa.exec(nfa, "abbbccd")).to.true;
+        expect(Nfa.exec(nfa, "ad")).to.true;
+        expect(Nfa.exec(nfa, "abe")).to.false;
+        expect(Nfa.exec(nfa, "a")).to.false;
+        expect(Nfa.exec(nfa, "ab")).to.false;
+        expect(Nfa.exec(nfa, "bd")).to.false;
+        expect(Nfa.exec(nfa, "")).to.false;
+    }
 }

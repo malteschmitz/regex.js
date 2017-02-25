@@ -66,7 +66,25 @@ function disjunction2nfa(disjunction: Disjunction): Nfa {
 }
 
 function kleene2nfa(kleene: Kleene): Nfa {
-  throw "Not yet implemented"
+  let operandNfa = regex2nfa(kleene.operand);
+  let transitions = operandNfa.transitions;
+  for(let [from, outgoingEdges] of transitions) {
+    for(let [input, tos] of outgoingEdges) {
+      for(let to of tos) {
+        if(operandNfa.acceptings.indexOf(to) >= 0) {
+          for(let initial of operandNfa.initials) {
+            Transitions.add(transitions, from, input, initial);
+          }
+        }
+      }
+    }
+  }
+  return {
+    states: operandNfa.states,
+    initials: operandNfa.initials,
+    transitions: transitions,
+    acceptings: operandNfa.acceptings.concat(operandNfa.initials)
+  };
 }
 
 export function regex2nfa(regex: RegEx): Nfa {
