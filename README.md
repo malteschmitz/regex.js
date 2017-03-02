@@ -37,12 +37,8 @@ Match: true
 ```
 
 ```
-> node regex.js "(ab|c*)e"
+> node main.js "(ab|c*)e" "ac"
 RegEx: (ab|(c)*)e
 Word: ac
-
-/Users/m/regex.js/regex2nfa.js:58
-    throw "Not yet implemented";
-    ^
-Not yet implemented
+Match: false
 ```

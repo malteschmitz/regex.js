@@ -21,13 +21,15 @@ function concatenation2nfa(concatenation: Concatenation): Nfa {
   right = Nfa.mapStates(right, q => q + offset);
 
   var transitions = right.transitions;
-  for (var [from, map] of left.transitions) {
-    for (var [input, to] of map) {
-      Transitions.add(transitions, from, input, to);
-      if (left.acceptings.indexOf(to) > -1) {
-        right.initials.forEach(initial => {
-          Transitions.add(transitions, from, input, initial);
-        });
+  for (let [from, map] of left.transitions) {
+    for (let [input, tos] of map) {
+      for (let to of tos) {
+        Transitions.add(transitions, from, input, to);
+        if (left.acceptings.indexOf(to) > -1) {
+          right.initials.forEach(initial => {
+            Transitions.add(transitions, from, input, initial);
+          });
+        }
       }
     }
   }
@@ -50,8 +52,8 @@ function disjunction2nfa(disjunction: Disjunction): Nfa {
 
   var transitions = two.transitions;
   for (var [from, map] of one.transitions) {
-    for (var [input, to] of map) {
-      Transitions.add(transitions, from, input, to);
+    for (var [input, tos] of map) {
+      Transitions.add(transitions, from, input, ...tos);
     }
   }
 
@@ -64,7 +66,25 @@ function disjunction2nfa(disjunction: Disjunction): Nfa {
 }
 
 function kleene2nfa(kleene: Kleene): Nfa {
-  throw "Not yet implemented"
+  let operandNfa = regex2nfa(kleene.operand);
+  let transitions = operandNfa.transitions;
+  for(let [from, outgoingEdges] of transitions) {
+    for(let [input, tos] of outgoingEdges) {
+      for(let to of tos) {
+        if(operandNfa.acceptings.indexOf(to) >= 0) {
+          for(let initial of operandNfa.initials) {
+            Transitions.add(transitions, from, input, initial);
+          }
+        }
+      }
+    }
+  }
+  return {
+    states: operandNfa.states,
+    initials: operandNfa.initials,
+    transitions: transitions,
+    acceptings: operandNfa.acceptings.concat(operandNfa.initials)
+  };
 }
 
 export function regex2nfa(regex: RegEx): Nfa {

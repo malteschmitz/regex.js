@@ -10,7 +10,9 @@
     "test": "mocha",
     "prewatch": "npm run jison",
     "watch": "tsc -p . -w",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "prestart": "npm run compile",
+    "start": "node main.js"
   },
   "author": "Malte Schmitz <malte@schmitz-sh.de>",
   "license": "MIT",
